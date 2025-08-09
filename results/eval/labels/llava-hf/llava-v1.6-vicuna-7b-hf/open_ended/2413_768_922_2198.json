@@ -1,0 +1,9 @@
+{
+  "image_path": "/home/zhiwei/VLAD_test/datasets/VLAD_Remote/xView/images/train/2413_768_922_2198.jpg",
+  "detections": {
+    "format1": [[0,196,141,384],[143,0,303,192],[194,0,384,382]],
+    "format2": [[0,372,104,567]],
+    "format3": [[0,205,141,461],[143,0,296,382],[197,205,604,757]]
+  },
+  "task_config": "open_ended"
+}

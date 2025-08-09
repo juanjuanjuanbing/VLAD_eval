@@ -1,0 +1,12 @@
+{
+  "image_path": "/home/zhiwei/VLAD_test/datasets/VLAD_Remote/xView/images/train/2567_512_2324_1686.jpg",
+  "detections": {
+    "facility": [[135,176,355,388]],
+    "structure": [[138,203,323,384]],
+    "passenger vehicle": [[143,347,212,428]],
+    "transportation": [[114,243,341,385]],
+    "cargo truck ": [[121,344,205,428]],
+    "heavy vehicle": [[151,344,233,426]]
+  },
+  "task_config": "open"
+}

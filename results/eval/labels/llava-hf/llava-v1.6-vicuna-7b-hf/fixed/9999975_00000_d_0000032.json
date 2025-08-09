@@ -1,0 +1,9 @@
+{
+  "image_path": "/home/zhiwei/VLAD_test/datasets/VLAD_Remote/VisDrone/VisDrone2019-DET-train/images/9999975_00000_d_0000032.jpg",
+  "detections": {
+    "Car": [[0,709,498,866]],
+    "Bus": [[0,726,694,1037]],
+    "Truck": [[0,706,694,1037]]
+  },
+  "task_config": "fixed"
+}

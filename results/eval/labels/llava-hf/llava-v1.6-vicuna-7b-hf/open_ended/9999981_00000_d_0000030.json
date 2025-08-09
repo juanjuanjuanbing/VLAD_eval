@@ -1,0 +1,9 @@
+{
+  "image_path": "/home/zhiwei/VLAD_test/datasets/VLAD_Remote/VisDrone/VisDrone2019-DET-train/images/9999981_00000_d_0000030.jpg",
+  "detections": {
+    "format1": [],
+    "format2": [[378,517,571,671]],
+    "format3": [[392,302,560,420]]
+  },
+  "task_config": "open_ended"
+}

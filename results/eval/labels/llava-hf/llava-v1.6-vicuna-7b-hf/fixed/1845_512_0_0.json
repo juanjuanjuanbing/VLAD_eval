@@ -1,0 +1,9 @@
+{
+  "image_path": "/home/zhiwei/VLAD_test/datasets/VLAD_Remote/xView/images/train/1845_512_0_0.jpg",
+  "detections": {
+    "Car": [[0,243,255,506]],
+    "Bus": [[0,205,254,506]],
+    "Truck": [[293,342,511,506]]
+  },
+  "task_config": "fixed"
+}

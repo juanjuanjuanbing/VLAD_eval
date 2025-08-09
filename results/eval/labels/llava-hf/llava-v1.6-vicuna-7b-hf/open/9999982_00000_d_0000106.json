@@ -1,0 +1,12 @@
+{
+  "image_path": "/home/zhiwei/VLAD_test/datasets/VLAD_Remote/VisDrone/VisDrone2019-DET-train/images/9999982_00000_d_0000106.jpg",
+  "detections": {
+    "facility": [[405,496,689,991],[692,496,972,991],[972,496,1252,991],[1137,496,1400,991]],
+    "structure": [[0,0,318,522],[322,0,606,262]],
+    "passenger vehicle": [],
+    "transportation": [[431,499,711,991]],
+    "cargo truck ": [[493,520,638,735]],
+    "heavy vehicle": [[482,520,591,735]]
+  },
+  "task_config": "open"
+}

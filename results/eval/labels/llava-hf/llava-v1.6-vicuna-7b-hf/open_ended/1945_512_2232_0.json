@@ -1,0 +1,9 @@
+{
+  "image_path": "/home/zhiwei/VLAD_test/datasets/VLAD_Remote/xView/images/train/1945_512_2232_0.jpg",
+  "detections": {
+    "format1": [],
+    "format2": [[143,242,246,387]],
+    "format3": [[0,0,96,147],[95,102,205,205]]
+  },
+  "task_config": "open_ended"
+}

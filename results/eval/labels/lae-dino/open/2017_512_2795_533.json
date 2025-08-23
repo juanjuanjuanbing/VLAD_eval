@@ -1,0 +1,12 @@
+{
+  "image_path": "2017_512_2795_533.jpg",
+  "detections": {
+    "facility": [[107,218,384,300],[459,125,512,238]],
+    "structure": [],
+    "passenger vehicle": [],
+    "transportation": [],
+    "cargo truck": [[505,286,511,303]],
+    "heavy vehicle": [[11,246,22,264],[0,206,10,225],[0,245,11,261],[210,21,224,40],[212,101,224,119]]
+  },
+  "task_config": "open"
+}

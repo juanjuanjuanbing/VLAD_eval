@@ -1,0 +1,12 @@
+{
+  "image_path": "2012_512_3920_1605.jpg",
+  "detections": {
+    "facility": [[0,275,68,333],[0,183,17,240],[280,145,344,183],[170,131,226,168]],
+    "structure": [],
+    "passenger vehicle": [],
+    "transportation": [],
+    "cargo truck": [],
+    "heavy vehicle": []
+  },
+  "task_config": "open"
+}

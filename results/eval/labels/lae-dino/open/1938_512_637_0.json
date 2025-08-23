@@ -1,0 +1,12 @@
+{
+  "image_path": "1938_512_637_0.jpg",
+  "detections": {
+    "facility": [],
+    "structure": [],
+    "passenger vehicle": [[150,2,165,12]],
+    "transportation": [],
+    "cargo truck": [[501,298,511,317],[150,2,165,12],[431,365,453,386],[450,366,484,400]],
+    "heavy vehicle": [[150,2,165,12],[501,298,511,317]]
+  },
+  "task_config": "open"
+}

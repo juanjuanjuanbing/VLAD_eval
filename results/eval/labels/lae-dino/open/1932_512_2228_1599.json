@@ -1,0 +1,12 @@
+{
+  "image_path": "1932_512_2228_1599.jpg",
+  "detections": {
+    "facility": [],
+    "structure": [],
+    "passenger vehicle": [[209,113,225,133]],
+    "transportation": [],
+    "cargo truck": [[209,113,225,133]],
+    "heavy vehicle": [[440,422,469,443],[271,498,295,511],[209,113,225,133],[464,438,500,462],[465,448,485,461],[263,508,287,511]]
+  },
+  "task_config": "open"
+}

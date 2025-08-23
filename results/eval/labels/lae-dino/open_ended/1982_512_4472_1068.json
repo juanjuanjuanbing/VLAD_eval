@@ -1,0 +1,9 @@
+{
+  "image_path": "1982_512_4472_1068.jpg",
+  "detections": {
+    "format1": [],
+    "format2": [[114,279,323,415]],
+    "format3": [[114,277,324,415]]
+  },
+  "task_config": "open_ended"
+}

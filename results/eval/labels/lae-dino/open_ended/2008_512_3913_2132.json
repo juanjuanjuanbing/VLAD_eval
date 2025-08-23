@@ -1,0 +1,9 @@
+{
+  "image_path": "2008_512_3913_2132.jpg",
+  "detections": {
+    "format1": [[212,427,313,504]],
+    "format2": [[212,426,312,505]],
+    "format3": [[0,71,183,233]]
+  },
+  "task_config": "open_ended"
+}

@@ -1,0 +1,9 @@
+{
+  "image_path": "2017_512_2795_533.jpg",
+  "detections": {
+    "format1": [[110,218,383,298]],
+    "format2": [[110,219,382,298]],
+    "format3": [[110,219,383,298]]
+  },
+  "task_config": "open_ended"
+}

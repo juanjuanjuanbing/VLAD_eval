@@ -1,0 +1,12 @@
+{
+  "image_path": "2020_512_1120_0.jpg",
+  "detections": {
+    "facility": [[227,370,310,428]],
+    "structure": [],
+    "passenger vehicle": [],
+    "transportation": [],
+    "cargo truck": [[0,80,18,95],[252,491,273,507]],
+    "heavy vehicle": [[252,491,273,507]]
+  },
+  "task_config": "open"
+}

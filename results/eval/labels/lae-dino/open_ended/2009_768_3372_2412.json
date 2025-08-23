@@ -1,0 +1,9 @@
+{
+  "image_path": "2009_768_3372_2412.jpg",
+  "detections": {
+    "format1": [],
+    "format2": [[0,0,767,59],[3,314,546,511],[130,0,766,55]],
+    "format3": []
+  },
+  "task_config": "open_ended"
+}

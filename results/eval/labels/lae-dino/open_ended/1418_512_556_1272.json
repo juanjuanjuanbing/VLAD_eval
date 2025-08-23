@@ -1,0 +1,9 @@
+{
+  "image_path": "1418_512_556_1272.jpg",
+  "detections": {
+    "format1": [[213,133,249,215]],
+    "format2": [[213,133,249,216]],
+    "format3": [[213,133,248,215]]
+  },
+  "task_config": "open_ended"
+}

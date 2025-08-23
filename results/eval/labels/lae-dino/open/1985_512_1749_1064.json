@@ -1,0 +1,12 @@
+{
+  "image_path": "1985_512_1749_1064.jpg",
+  "detections": {
+    "facility": [],
+    "structure": [],
+    "passenger vehicle": [],
+    "transportation": [],
+    "cargo truck": [],
+    "heavy vehicle": [[376,99,407,120]]
+  },
+  "task_config": "open"
+}

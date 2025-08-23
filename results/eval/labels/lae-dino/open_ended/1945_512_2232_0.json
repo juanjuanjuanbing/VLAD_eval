@@ -1,0 +1,9 @@
+{
+  "image_path": "1945_512_2232_0.jpg",
+  "detections": {
+    "format1": [],
+    "format2": [[172,311,511,498]],
+    "format3": [[172,314,511,502],[206,0,511,161]]
+  },
+  "task_config": "open_ended"
+}

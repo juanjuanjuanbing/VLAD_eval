@@ -1,0 +1,9 @@
+{
+  "image_path": "1832_512_2196_1548.jpg",
+  "detections": {
+    "Car": [],
+    "Bus": [[93,127,120,140]],
+    "Truck": [[93,127,120,140]]
+  },
+  "task_config": "fixed"
+}

@@ -1,0 +1,12 @@
+{
+  "image_path": "1980_512_559_534.jpg",
+  "detections": {
+    "facility": [],
+    "structure": [],
+    "passenger vehicle": [[81,459,102,474]],
+    "transportation": [],
+    "cargo truck": [[81,459,102,474]],
+    "heavy vehicle": [[81,459,102,474],[223,396,236,417]]
+  },
+  "task_config": "open"
+}

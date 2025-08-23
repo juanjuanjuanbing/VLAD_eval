@@ -1,0 +1,9 @@
+{
+  "image_path": "5_512_2580_1208.jpg",
+  "detections": {
+    "format1": [[29,206,371,356]],
+    "format2": [[29,204,373,356]],
+    "format3": [[28,205,371,356]]
+  },
+  "task_config": "open_ended"
+}

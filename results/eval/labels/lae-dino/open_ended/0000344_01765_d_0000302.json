@@ -1,0 +1,9 @@
+{
+  "image_path": "0000344_01765_d_0000302.jpg",
+  "detections": {
+    "format1": [],
+    "format2": [],
+    "format3": [[1,116,903,376],[3,276,1165,765]]
+  },
+  "task_config": "open_ended"
+}

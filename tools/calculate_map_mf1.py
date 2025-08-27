@@ -52,36 +52,27 @@ def calculate_ap(recalls, precisions):
             interp_precisions.append(0)
     return np.mean(interp_precisions)
 
-def evaluate_dataset(image_paths, class_ids):
-    """评估指定数据集和类别"""
+def evaluate_dataset(image_paths, class_ids, model_path):
+    """评估指定数据集和类别（仅计算IoU≥0.5的匹配）"""
     gt_boxes = []
     pred_boxes = []
-    
+
+    # 初始化统计变量
+    total_gt = 0      # 所有类别的GT总数
+    total_matched = 0  # 所有类别的成功匹配数（TP）
+
     for img_path in image_paths:
-        # 获取图片文件名（不带路径）
         img_filename = os.path.basename(img_path)
         label_filename = img_filename.replace('.jpg', '.txt')
-        
-        # GT标签路径
         label_path = img_path.replace('images', 'labels').replace('.jpg', '.txt')
-        
-        # 预测结果路径统一在 ./results/labels/ 下
-        file_name = 'ms-swift/output/export_v3_23936/fixed' 
-        # 'ms-swift/output/export_v3_23936/fixed' 
-        #'Qwen/Qwen2.5-VL-7B-Instruct/fixed' 
-        pred_path = os.path.join(f'./results/eval/coco_labels/{file_name}', label_filename)
-        print(pred_path)
-        
+        pred_path = os.path.join(f'./results/eval/coco_labels/{model_path}', label_filename)        
         gt_boxes.append(parse_label_file(label_path))
         pred_boxes.append(parse_label_file(pred_path))
     
-    # 存储每个类别的结果
-    class_results = {class_id: {'tp': [], 'fp': [], 'scores': [], 'n_gt': 0} 
+    class_results = {class_id: {'tp': [], 'fp': [], 'scores': [], 'n_gt': 0, 'ious': []} 
                      for class_id in class_ids}
     
-    # 遍历每张图片
     for gt_img, pred_img in zip(gt_boxes, pred_boxes):
-        # 按类别分组
         gt_by_class = defaultdict(list)
         for gt in gt_img:
             if gt[0] in class_ids:
@@ -90,22 +81,18 @@ def evaluate_dataset(image_paths, class_ids):
         pred_by_class = defaultdict(list)
         for pred in pred_img:
             if pred[0] in class_ids:
-                pred_by_class[pred[0]].append({'box': pred[1:], 'score': 1.0})  # 假设置信度为1.0
+                pred_by_class[pred[0]].append({'box': pred[1:], 'score': 1.0})
         
-        # 对每个类别处理
         for class_id in class_ids:
             class_gt = gt_by_class.get(class_id, [])
             class_pred = pred_by_class.get(class_id, [])
-            
             class_results[class_id]['n_gt'] += len(class_gt)
+            total_gt += len(class_gt)  # 累加到全局GT总数
             
             if not class_pred:
                 continue
                 
-            # 按置信度排序预测框
             class_pred_sorted = sorted(class_pred, key=lambda x: x['score'], reverse=True)
-            
-            # 初始化匹配状态
             gt_matched = [False] * len(class_gt)
             
             for pred in class_pred_sorted:
@@ -113,7 +100,6 @@ def evaluate_dataset(image_paths, class_ids):
                 max_iou = 0
                 best_gt_idx = -1
                 
-                # 计算与所有GT框的IOU
                 for gt_idx, gt_box in enumerate(class_gt):
                     if not gt_matched[gt_idx]:
                         iou = calculate_iou(pred_box, gt_box)
@@ -121,89 +107,147 @@ def evaluate_dataset(image_paths, class_ids):
                             max_iou = iou
                             best_gt_idx = gt_idx
                 
-                # 判断是否匹配
-                if max_iou >= 0.5:  # IoU阈值为0.5
+                # 关键修改：仅记录IoU≥0.5的匹配
+                if max_iou >= 0.5:
+                    class_results[class_id]['ious'].append(max_iou)
+                
+                if max_iou >= 0.5:
                     gt_matched[best_gt_idx] = True
                     class_results[class_id]['tp'].append(1)
                     class_results[class_id]['fp'].append(0)
+                    total_matched += 1  # 成功匹配数+1
                 else:
                     class_results[class_id]['tp'].append(0)
                     class_results[class_id]['fp'].append(1)
                 
                 class_results[class_id]['scores'].append(pred['score'])
     
-    # 计算每个类别的AP和F1
     aps = []
     f1s = []
+    ious = []
     
     for class_id in class_ids:
         tp = np.array(class_results[class_id]['tp'])
         fp = np.array(class_results[class_id]['fp'])
         scores = np.array(class_results[class_id]['scores'])
         n_gt = class_results[class_id]['n_gt']
+        class_ious = class_results[class_id]['ious']
         
         if len(tp) == 0:
             aps.append(0)
             f1s.append(0)
+            ious.append(0)
             continue
             
-        # 按分数排序
         sort_idx = np.argsort(-scores)
         tp = tp[sort_idx]
         fp = fp[sort_idx]
         
-        # 计算累积TP和FP
         tp_cumsum = np.cumsum(tp)
         fp_cumsum = np.cumsum(fp)
         
-        # 计算召回率和精确率
         recalls = tp_cumsum / max(1, n_gt)
         precisions = tp_cumsum / np.maximum(tp_cumsum + fp_cumsum, np.finfo(np.float64).eps)
         
-        # 计算AP
         ap = calculate_ap(recalls, precisions)
         aps.append(ap)
         
-        # 计算F1
         f1 = 2 * precisions[-1] * recalls[-1] / max(precisions[-1] + recalls[-1], 1e-6)
         f1s.append(f1)
+        
+        mean_iou = np.mean(class_ious) if class_ious else 0
+        ious.append(mean_iou)
     
-    # 计算mAP和mF1
     map_nc = np.mean(aps)
     mf1 = np.mean(f1s)
+    miou = np.mean(ious)
+
+    # 打印统计信息
+    print(f"\n[统计] GT总数: {total_gt}, 成功匹配数(TP): {total_matched}")
+    print(f"[统计] 匹配率: {total_matched / max(1, total_gt):.2%}")
     
-    return map_nc, mf1
+    return map_nc, mf1, miou
 
 def main():
+    # 定义候选模型列表
+    candidate_models = [
+        'ms-swift/output/export_v5_11968/fixed/default',
+        'ms-swift/output/export_v5_11968/open/mapping1',
+        'ms-swift/output/export_v5_11968/open/mapping2',
+        'Qwen/Qwen2.5-VL-7B-Instruct/fixed/default',
+        'Qwen/Qwen2.5-VL-7B-Instruct/open/mapping1',
+        'Qwen/Qwen2.5-VL-7B-Instruct/open/mapping2',
+        'Falcon/fixed/default',
+        'Falcon/open/mapping1',
+        'Falcon/open/mapping2',
+        'llava-hf/llava-v1.6-vicuna-7b-hf/fixed/default'
+    ]
+    
     # 定义要计算的类别
-
-    visdrone_classes = [3,8,5]  # 示例: VisDrone类别ID
-    xview_classes = [5,6,9,48]     # 示例: xView类别ID
+    visdrone_classes = [3, 8, 5]  # VisDrone类别ID
+    xview_classes = [48]          # xView类别ID
     
     # 读取测试图片列表
     with open('./datasets/VLAD_Remote/test_image_list.txt', 'r') as f:
         image_paths = [line.strip() for line in f if line.strip()]
     
-    # 分离VisDrone和xView图片路径
+    # 分离VisDrone和xView图片路径，并统计样本量
     visdrone_paths = [p for p in image_paths if 'VisDrone' in p]
     xview_paths = [p for p in image_paths if 'xView' in p]
+    n_visdrone = len(visdrone_paths)
+    n_xview = len(xview_paths)
+    total_samples = n_visdrone + n_xview
     
-    # 计算VisDrone指标
-    visdrone_map, visdrone_mf1 = evaluate_dataset(visdrone_paths, visdrone_classes)
+    # 计算权重
+    weight_visdrone = n_visdrone / total_samples
+    weight_xview = n_xview / total_samples
     
-    # 计算xView指标
-    xview_map, xview_mf1 = evaluate_dataset(xview_paths, xview_classes)
+    # 准备结果文件
+    result_file = './results/eval/model_comparison.txt'
+    os.makedirs(os.path.dirname(result_file), exist_ok=True)
     
-    # 输出结果
-    print("VisDrone Results (Classes: {}):".format(visdrone_classes))
-    print("- mAPnc: {:.4f}".format(visdrone_map))
-    print("- mF1: {:.4f}".format(visdrone_mf1))
+    with open(result_file, 'w') as f:
+        f.write("Model Evaluation Results\n")
+        f.write("="*50 + "\n")
+        f.write(f"VisDrone样本数: {n_visdrone}, xView样本数: {n_xview}\n")
+        f.write(f"权重分配: VisDrone={weight_visdrone:.2f}, xView={weight_xview:.2f}\n")
+        f.write("="*50 + "\n\n")
+        
+        for model in candidate_models:
+            f.write(f"Evaluating model: {model}\n")
+            
+            # 计算VisDrone指标
+            visdrone_map, visdrone_mf1, visdrone_miou = evaluate_dataset(
+                visdrone_paths, visdrone_classes, model)
+            
+            # 计算xView指标
+            xview_map, xview_mf1, xview_miou = evaluate_dataset(
+                xview_paths, xview_classes, model)
+            
+            # 按样本量加权平均
+            avg_map = (visdrone_map * weight_visdrone + xview_map * weight_xview)
+            avg_mf1 = (visdrone_mf1 * weight_visdrone + xview_mf1 * weight_xview)
+            avg_miou = (visdrone_miou * weight_visdrone + xview_miou * weight_xview)
+            
+            # 写入结果
+            f.write("VisDrone Results (Classes: {}):\n".format(visdrone_classes))
+            f.write("- mAPnc: {:.4f}\n".format(visdrone_map))
+            f.write("- mF1: {:.4f}\n".format(visdrone_mf1))
+            f.write("- mIoU: {:.4f}\n".format(visdrone_miou))
+            
+            f.write("\nxView Results (Classes: {}):\n".format(xview_classes))
+            f.write("- mAPnc: {:.4f}\n".format(xview_map))
+            f.write("- mF1: {:.4f}\n".format(xview_mf1))
+            f.write("- mIoU: {:.4f}\n".format(xview_miou))
+            
+            f.write("\nWeighted Average (by sample size):\n")
+            f.write("- mAPnc: {:.4f}\n".format(avg_map))
+            f.write("- mF1: {:.4f}\n".format(avg_mf1))
+            f.write("- mIoU: {:.4f}\n".format(avg_miou))
+            
+            f.write("\n" + "="*50 + "\n\n")
     
-    print("\nxView Results (Classes: {}):".format(xview_classes))
-    print("- mAPnc: {:.4f}".format(xview_map))
-    print("- mF1: {:.4f}".format(xview_mf1))
+    print(f"Evaluation completed. Results saved to {result_file}")
 
 if __name__ == '__main__':
     main()
-
-

@@ -1,0 +1,5 @@
+{
+  "image_path": "756_768_0_816.jpg",
+  "detections": [[0,173,768,679],[1,503,543,768]],
+  "task_config": "open_ended"
+}

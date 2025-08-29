@@ -1,0 +1,12 @@
+{
+  "image_path": "111_512_563_552.jpg",
+  "detections": {
+    "cargo truck": [[30,367,49,380],[333,182,342,199],[307,166,316,180],[218,177,228,194]],
+    "facility": [],
+    "heavy vehicle": [[333,181,342,199]],
+    "passenger vehicle": [],
+    "structure": [[0,335,184,363],[0,320,308,363],[78,319,188,364]],
+    "transportation": []
+  },
+  "task_config": "open"
+}

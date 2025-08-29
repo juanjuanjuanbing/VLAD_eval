@@ -1,0 +1,12 @@
+{
+  "image_path": "1906_512_1914_2013.jpg",
+  "detections": {
+    "cargo truck": [],
+    "facility": [],
+    "heavy vehicle": [],
+    "passenger vehicle": [],
+    "structure": [[130,211,446,395],[115,215,504,509],[102,134,424,396],[90,252,193,394],[75,216,241,425],[112,288,511,511],[77,204,203,397]],
+    "transportation": []
+  },
+  "task_config": "open"
+}

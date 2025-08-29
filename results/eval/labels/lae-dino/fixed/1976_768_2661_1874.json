@@ -1,0 +1,10 @@
+{
+  "image_path": "1976_768_2661_1874.jpg",
+  "detections": {
+    "building": [],
+    "bus": [],
+    "car": [[210,432,228,448]],
+    "truck": []
+  },
+  "task_config": "fixed"
+}
